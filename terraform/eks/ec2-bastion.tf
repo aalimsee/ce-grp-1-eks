@@ -1,6 +1,9 @@
 data "http" "my_public_ip" {
   url = "https://ifconfig.me/ip"
 }
+output "my_ip" {
+  value = chomp(data.http.my_public_ip.response_body)
+}
 
 resource "aws_security_group" "bastion_sg" {
   name        = "ce-grp-1-bastion-sg"
@@ -14,14 +17,12 @@ resource "aws_security_group" "bastion_sg" {
     protocol    = "tcp"
     cidr_blocks = ["${chomp(data.http.my_public_ip.response_body)}/32"]
   }
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   tags = {
     Name    = "ce-grp-1-bastion-sg"
     Project = "ce-grp-1"
@@ -31,12 +32,10 @@ resource "aws_security_group" "bastion_sg" {
 data "aws_ami" "amazon_linux_2" {
   most_recent = true
   owners      = ["amazon"]
-
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
-
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
