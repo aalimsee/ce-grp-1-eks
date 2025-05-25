@@ -1,3 +1,6 @@
+data "http" "my_ip" {
+  url = "https://checkip.amazonaws.com/"
+}
 
 resource "aws_security_group" "bastion_sg" {
   name        = "ce-grp-1-bastion-sg"
@@ -9,7 +12,7 @@ resource "aws_security_group" "bastion_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${chomp(data.http.my_ip.response_body)}/32"]
   }
 
   egress {
@@ -47,6 +50,10 @@ resource "aws_instance" "bastion" {
   key_name                    = "ce-grp-1-keypair"
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
+
+  root_block_device {
+    encrypted = true
+  }
 
   tags = {
     Name    = "ce-grp-1-bastion"
