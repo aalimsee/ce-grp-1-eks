@@ -29,7 +29,7 @@ module "eks" {
   vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
 
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false
+  cluster_endpoint_public_access  = true # Temporarily Enable Public Access for Testing
 
   eks_managed_node_groups = {
     ce-grp-1-default = {

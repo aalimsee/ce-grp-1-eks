@@ -56,7 +56,7 @@ resource "aws_iam_role_policy" "eks_admin_policy" {
         ]
         Resource = [
           "arn:aws:s3:::ce-grp-1-tfstate/eks/terraform.tfstate",
-          "arn:aws:s3:::ce-grp-1-tfstate/vpc/terraform.tfstate"
+          "arn:aws:s3:::ce-grp-1-tfstate/vpc/terraform.tfstate" # Allow access to all terraform.tfstate keys in S3 (if dynamic)
         ]
       },
       {
@@ -74,7 +74,7 @@ resource "aws_iam_role_policy" "eks_admin_policy" {
           "iam:ListRolePolicies",
           "iam:GetRolePolicy"
         ]
-        Resource = "arn:aws:iam::255945442255:role/*"
+        Resource = "arn:aws:iam::255945442255:role/*" # Fine-tune IAM scope (optional). If needed, you can scope this down to only the roles Terraform manages (e.g., those with prefix ce-grp-1-*), but this is OK for now.
       },
       {
         Sid      = "EC2DescribeImages"
@@ -90,6 +90,14 @@ resource "aws_iam_role_policy" "eks_admin_policy" {
           "logs:ListTagsForResource"
         ]
         Resource = "*"
+      },
+      {
+        "Sid" : "AllowAccessKubernetesApi",
+        "Effect" : "Allow",
+        "Action" : [
+          "eks:AccessKubernetesApi" # This is required if you use the AccessEntry API (newer EKS auth method)
+        ],
+        "Resource" : "*"
       }
     ]
   })
