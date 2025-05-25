@@ -1,0 +1,63 @@
+# EC-bastion accessible, how to test EKS?
+
+✅ Step 1: SSH into the Bastion Host
+From your local terminal:
+
+bash
+ssh -i aalimsee-keypair.pem ec2-user@<BASTION_PUBLIC_IP>
+Replace <BASTION_PUBLIC_IP> with the actual public IP of your EC2.
+
+✅ Step 2: Install Required Tools on the Bastion (if not already installed)
+🧩 Option 1: Install both kubectl and aws CLI
+bash
+# Install AWS CLI v2
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+# Install kubectl (EKS-compatible version)
+curl -LO "https://s3.us-west-2.amazonaws.com/amazon-eks/1.32.0/2024-04-05/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+Replace 1.32.0 with your actual EKS cluster version (1.32).
+
+✅ Step 3: Configure AWS CLI on the Bastion
+Option A (best): Export temporary creds if you're assuming a role
+bash
+export AWS_ACCESS_KEY_ID=<your-temp-key>
+export AWS_SECRET_ACCESS_KEY=<your-temp-secret>
+export AWS_SESSION_TOKEN=<your-temp-session-token>
+
+Option B (if using long-term IAM user credentials for bastion):
+bash
+aws configure
+
+✅ Step 4: Generate Kubeconfig from Bastion
+Run:
+
+bash
+aws eks update-kubeconfig \
+  --region us-east-1 \
+  --name ce-grp-1-eks
+
+✅ Step 5: Test EKS Access
+bash
+kubectl get nodes
+kubectl get ns
+You should see your managed node group and default namespaces like:
+
+csharp
+NAME                                STATUS   ROLES    AGE   VERSION
+ip-10-0-1-32.ec2.internal           Ready    <none>   5m    v1.32.x
+...
+
+NAME              STATUS   AGE
+default           Active   ...
+kube-system       Active   ...
+kube-public       Active   ...
+
+✅ Next Step: Create Namespaces for GitOps
+bash
+kubectl create ns dev
+kubectl create ns test
+kubectl create ns prod
