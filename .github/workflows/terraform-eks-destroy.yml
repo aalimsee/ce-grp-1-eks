@@ -6,16 +6,17 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  TF_IN_AUTOMATION: true
+  TF_IN_AUTOMATION: true # TF_VAR_<variable_name> is a way to pass variables into Terraform via environment variables.
 
 jobs:
   terraform-destroy:
     name: Destroy EKS Infrastructure
     runs-on: ubuntu-latest
+    environment: manual-approval   # ← 🔒 Require approval before running
+
     defaults:
       run:
         working-directory: terraform/eks
-    environment: manual-approval   # ← 🔒 Require approval before running
 
     steps:
       - name: Checkout Repository

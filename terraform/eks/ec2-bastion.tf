@@ -15,7 +15,9 @@ resource "aws_security_group" "bastion_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${chomp(data.http.my_public_ip.response_body)}/32"]
+    # cidr_blocks = ["${chomp(data.http.my_public_ip.response_body)}/32"] 
+    # Hardcode my_public_ip here, because running in GitHub Actions Workflows will take ip address from GitHub
+    cidr_blocks = ["151.192.138.30/32"]
   }
   egress {
     from_port   = 0

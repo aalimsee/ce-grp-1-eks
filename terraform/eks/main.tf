@@ -8,7 +8,6 @@ provider "aws" {
 
 data "terraform_remote_state" "vpc" {
   backend = "s3"
-
   config = {
     bucket = "ce-grp-1-tfstate"
     key    = "vpc/terraform.tfstate"
@@ -16,11 +15,10 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
-
 # EKS Cluster
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "20.8.4"
+  version = "20.36.0"
 
   cluster_name    = "ce-grp-1-eks"
   cluster_version = "1.32"
@@ -29,7 +27,10 @@ module "eks" {
   vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
 
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false
+  cluster_endpoint_public_access  = true # Temporarily Enable Public Access for Testing
+
+  # Optional: Adds the current caller identity as an administrator via cluster access entry
+  enable_cluster_creator_admin_permissions = true
 
   eks_managed_node_groups = {
     ce-grp-1-default = {
@@ -43,8 +44,30 @@ module "eks" {
   authentication_mode = "API"
 
   access_entries = {
-    admin-role = {
-      principal_arn       = aws_iam_role.eks_admin.arn
+    # Existing admin role
+    eks-admin-role = {
+      principal_arn       = "arn:aws:iam::255945442255:role/ce-grp-1-eks-admin-role"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    # Additional user
+    lukej-ce9 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/lukej-ce9"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    clifford_ce9 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/clifford_ce9"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    dhts1990 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/dhts1990"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    azni_ce9 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/azni_ce9"
       kubernetes_groups   = ["cluster-admins"]
       policy_associations = []
     }
