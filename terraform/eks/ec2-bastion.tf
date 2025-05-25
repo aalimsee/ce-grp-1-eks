@@ -44,7 +44,7 @@ resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.amazon_linux_2.id
   instance_type               = "t2.micro"
   subnet_id                   = data.terraform_remote_state.vpc.outputs.public_subnets[0]
-  key_name                    = "aalimsee-keypair"
+  key_name                    = "ce-grp-1-keypair"
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
 
