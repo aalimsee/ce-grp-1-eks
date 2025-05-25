@@ -6,20 +6,20 @@ on:
 
 env:
   AWS_REGION: us-east-1
+  TF_IN_AUTOMATION: true
 
 jobs:
   terraform-destroy:
     name: Destroy EKS Infrastructure
     runs-on: ubuntu-latest
-    environment: manual-approval   # ← 🔒 Require approval before running
-
     defaults:
       run:
         working-directory: terraform/eks
+    environment: manual-approval   # ← 🔒 Require approval before running
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
