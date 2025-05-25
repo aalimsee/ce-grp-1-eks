@@ -18,8 +18,9 @@ data "terraform_remote_state" "vpc" {
 
 # EKS Cluster
 module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "20.8.4"
+  source = "terraform-aws-modules/eks/aws"
+  # version = "20.8.4"
+  version = "19.21.0" # ✅ Supports aws_auth_users and manage_aws_auth
 
   cluster_name    = "ce-grp-1-eks"
   cluster_version = "1.32"
@@ -28,7 +29,7 @@ module "eks" {
   vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
 
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false # Temporarily Enable Public Access for Testing
+  cluster_endpoint_public_access  = true # Temporarily Enable Public Access for Testing
 
   eks_managed_node_groups = {
     ce-grp-1-default = {
@@ -39,21 +40,32 @@ module "eks" {
     }
   }
 
-  authentication_mode = "API"
+  #   # authentication_mode = "API"
 
-  access_entries = {
-    admin-role = {
-      principal_arn       = aws_iam_role.eks_admin.arn
-      kubernetes_groups   = ["cluster-admins"]
-      policy_associations = []
+  #   access_entries = {
+  #     admin-role = {
+  #       principal_arn       = aws_iam_role.eks_admin.arn
+  #       kubernetes_groups   = ["cluster-admins"]
+  #       policy_associations = []
+  #     }
+  #     # Add aalimsee_ce9 to EKS Access Entries
+  #     # aalimsee-user = {
+  #     #   principal_arn       = "arn:aws:iam::255945442255:user/aalimsee_ce9"
+  #     #   kubernetes_groups   = ["cluster-admins"]
+  #     #   policy_associations = []
+  #     # }
+  #   }
+
+  manage_aws_auth = true
+
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::255945442255:user/aalimsee_ce9"
+      username = "aalimsee_ce9"
+      groups   = ["system:masters"]
     }
-    # Add aalimsee_ce9 to EKS Access Entries
-    # aalimsee-user = {
-    #   principal_arn       = "arn:aws:iam::255945442255:user/aalimsee_ce9"
-    #   kubernetes_groups   = ["cluster-admins"]
-    #   policy_associations = []
-    # }
-  }
+  ]
+
 
   tags = {
     Project = "ce-grp-1"
