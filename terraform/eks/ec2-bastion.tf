@@ -1,5 +1,5 @@
 data "http" "my_public_ip" {
-  url = "https://ifconfig.me/ip"
+  url = "https://checkip.amazonaws.com/"
 }
 output "my_ip" {
   value = chomp(data.http.my_public_ip.response_body)
