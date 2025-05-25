@@ -48,6 +48,12 @@ module "eks" {
       kubernetes_groups   = ["cluster-admins"]
       policy_associations = []
     }
+    # Add aalimsee_ce9 to EKS Access Entries
+    aalimsee-user = {
+      principal_arn       = "arn:aws:iam::255945442255:user/aalimsee_ce9"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
   }
 
   tags = {
