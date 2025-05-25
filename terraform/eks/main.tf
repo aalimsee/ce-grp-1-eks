@@ -42,18 +42,36 @@ module "eks" {
   }
 
   authentication_mode = "API"
-  #   access_entries = {
-  #     eks-admin = {
-  #       principal_arn       = "arn:aws:iam::255945442255:role/ce-grp-1-eks-admin-role"
-  #       kubernetes_groups   = ["cluster-admins"]
-  #       policy_associations = []
-  #     }
-  # admin-role = {
-  #   principal_arn       = "arn:aws:iam::255945442255:user/aalimsee_ce9"
-  #   kubernetes_groups   = ["cluster-admins"]
-  #   policy_associations = []
-  # }
-  #   }
+
+  access_entries = {
+    # Existing admin role
+    eks-admin-role = {
+      principal_arn       = "arn:aws:iam::255945442255:role/ce-grp-1-eks-admin-role"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    # Additional user
+    lukej-ce9 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/lukej-ce9"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    clifford_ce9 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/clifford_ce9"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    dhts1990 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/dhts1990"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+    azni_ce9 = {
+      principal_arn       = "arn:aws:iam::255945442255:user/azni_ce9"
+      kubernetes_groups   = ["cluster-admins"]
+      policy_associations = []
+    }
+  }
 
   tags = {
     Project = "ce-grp-1"
