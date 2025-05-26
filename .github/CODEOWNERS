@@ -7,4 +7,4 @@
 # The first line defines that all files within the /docs directory are owned by @username1. 
 # The second line specifies that all JavaScript files (*.js) are owned by @dev-team. 
 
-/ @aalimsee_ce9
+* @aalimsee_ce9
