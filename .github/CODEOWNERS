@@ -1,0 +1,10 @@
+# In the CODEOWNERS file, define code owners by specifying file patterns followed by the GitHub usernames or team names. Here’s an example format:
+
+# This is a comment
+/docs @username1
+*.js @dev-team
+
+# The first line defines that all files within the /docs directory are owned by @username1. 
+# The second line specifies that all JavaScript files (*.js) are owned by @dev-team. 
+
+/ @aalimsee_ce9
