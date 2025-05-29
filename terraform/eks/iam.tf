@@ -268,3 +268,38 @@ resource "aws_iam_role_policy" "eks_admin_policy" {
     ]
   })
 }
+
+resource "aws_iam_policy" "ebs_csi_custom_policy" {
+  name        = "ce-grp-1-ebs-csi-policy"
+  description = "Custom policy for Amazon EBS CSI driver"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ec2:AttachVolume",
+          "ec2:CreateSnapshot",
+          "ec2:CreateTags",
+          "ec2:CreateVolume",
+          "ec2:DeleteSnapshot",
+          "ec2:DeleteTags",
+          "ec2:DeleteVolume",
+          "ec2:DescribeInstances",
+          "ec2:DescribeSnapshots",
+          "ec2:DescribeTags",
+          "ec2:DescribeVolumes",
+          "ec2:DescribeAvailabilityZones",
+          "ec2:DetachVolume",
+          "ec2:ModifyVolume"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi_custom_attach" {
+  role       = aws_iam_role.eks_admin.name
+  policy_arn = aws_iam_policy.ebs_csi_custom_policy.arn
+}
