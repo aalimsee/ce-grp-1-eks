@@ -17,3 +17,8 @@ resource "aws_iam_policy" "ecr_pull_policy" {
     ]
   })
 }
+
+resource "aws_iam_role_policy_attachment" "ecr_pull_attach" {
+  role       = aws_iam_role.eks_admin.name # or your node/IRSA role name
+  policy_arn = aws_iam_policy.ecr_pull_policy.arn
+}
