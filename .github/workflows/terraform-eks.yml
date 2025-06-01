@@ -47,7 +47,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan   # -var-file="terraform.tfvars" because of github workflows
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/dev'
@@ -72,3 +72,4 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: "--severity-threshold=medium --org=aalimsee"
+
