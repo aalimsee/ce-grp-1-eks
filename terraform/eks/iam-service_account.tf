@@ -39,3 +39,4 @@ resource "aws_iam_role_policy" "externaldns_policy" {
     ]
   })
 }
+
