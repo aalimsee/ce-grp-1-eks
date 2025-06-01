@@ -24,6 +24,7 @@ variable "oidc_provider_url" {
 
 variable "oidc_provider_arn" {
   description = "EKS cluster OIDC provider ARN"
-  type        = "arn:aws:iam::255945442255:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/B543C0746CEE9D2BDF9789C187D4A0F7"
+  type        = string
+  default     = "arn:aws:iam::255945442255:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/B543C0746CEE9D2BDF9789C187D4A0F7"
 }
 # --- end
