@@ -14,15 +14,16 @@
 
 
 # --- start
-# Accepts your EKS OIDC provider URL and ARN as variables
+# Accepts your EKS OIDC provider URL and ARN as variables. Setup for Prometheus and Grafana.
 
 variable "oidc_provider_url" {
   description = "EKS cluster OIDC provider URL"
   type        = string
+  default     = "https://oidc.eks.us-east-1.amazonaws.com/id/B543C0746CEE9D2BDF9789C187D4A0F7"
 }
 
 variable "oidc_provider_arn" {
   description = "EKS cluster OIDC provider ARN"
-  type        = string
+  type        = "arn:aws:iam::255945442255:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/B543C0746CEE9D2BDF9789C187D4A0F7"
 }
 # --- end

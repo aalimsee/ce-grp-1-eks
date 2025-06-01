@@ -47,7 +47,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -var-file="terraform.tfvars" -out=tfplan   # 
+        run: terraform plan -out=tfplan   # -var-file="terraform.tfvars" because of github workflows
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/dev'
@@ -73,4 +73,3 @@ jobs:
         with:
           args: "--severity-threshold=medium --org=aalimsee"
 
-          
